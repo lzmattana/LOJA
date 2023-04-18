@@ -2,20 +2,20 @@ package lzm_loja.modelo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "pedidos")
-public class Pedidos {
+public class Pedido {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +25,19 @@ public class Pedidos {
 
 	@ManyToOne
 	private Cliente cliente;
-	
-	@OneToMany
-	private List<ItemPedido> itens;
 
-	public Pedidos() {
+	@OneToMany(mappedBy = "pedido") // mapeando para nao criar tabelas desmecessarias
+	private List<ItemPedido> itens = new ArrayList<>();
+
+	public Pedido() {
 	}
 
-	public Pedidos(Cliente cliente) {
+	public void adicionarItem(ItemPedido item) {
+		item.setPedido(this); // o item conhece o pedido
+		this.itens.add(item); // o pedido conhece o item
+	}
+
+	public Pedido(Cliente cliente) {
 		this.cliente = cliente;
 	}
 

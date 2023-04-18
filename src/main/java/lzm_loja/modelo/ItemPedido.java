@@ -19,16 +19,17 @@ public class ItemPedido {
 	private int quantidade;
 
 	@ManyToOne
-	private Pedidos pedido;
+	private Pedido pedido;
 	@ManyToOne
 	private Produto produto;
 
 	public ItemPedido() {
 	}
 
-	public ItemPedido(int quantidade, Pedidos pedido, Produto produto) {
+	public ItemPedido(int quantidade, Pedido pedido, Produto produto) {
 		this.quantidade = quantidade;
 		this.pedido = pedido;
+		this.precoUnitario = produto.getPreco();
 		this.produto = produto;
 	}
 
@@ -56,11 +57,11 @@ public class ItemPedido {
 		this.quantidade = quantidade;
 	}
 
-	public Pedidos getPedido() {
+	public Pedido getPedido() {
 		return pedido;
 	}
 
-	public void setPedido(Pedidos pedido) {
+	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
 
