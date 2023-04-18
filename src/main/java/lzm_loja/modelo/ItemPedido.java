@@ -2,6 +2,7 @@ package lzm_loja.modelo;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,7 @@ public class ItemPedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(name = "preco_unitario") // mudando o nome do camelCase
 	private BigDecimal precoUnitario;
 	private int quantidade;
 
