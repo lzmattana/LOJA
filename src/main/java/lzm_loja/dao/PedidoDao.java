@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import lzm_loja.modelo.Pedido;
+import lzm_loja.vo.RelatorioDeVendasVo;
 
 public class PedidoDao {
 	private EntityManager em;
@@ -23,12 +24,17 @@ public class PedidoDao {
 		return em.createQuery(jpql, BigDecimal.class).getSingleResult();
 	}
 	
-	public List<Object[]> relatorioDeVendas() {
-		String jpql = "SELECT produto.nome, SUM(item.quantidade), MAX(pedido.data) "
+	//public List<Object[]> relatorioDeVendas() { nao é melhor pratica colocar objeto
+	public List<RelatorioDeVendasVo> relatorioDeVendas() { // classe value object
+		//String jpql = "SELECT produto.nome, " para uma entidade usando List<>
+		String jpql = "SELECT new lzm_loja.vo.RelatorioDeVendasVo("
+				+ "produto.nome, "
+				+ "SUM(item.quantidade), "
+				+ "MAX(pedido.data)) "
 				+ "FROM Pedido pedido "
 				+ "JOIN pedido.itens item JOIN item.produto produto GROUP BY produto.nome "
 				+ "ORDER BY item.quantidade DESC";
-		return em.createQuery(jpql, Object[].class).getResultList();
+		return em.createQuery(jpql, RelatorioDeVendasVo.class).getResultList();
 	}
 
 }
