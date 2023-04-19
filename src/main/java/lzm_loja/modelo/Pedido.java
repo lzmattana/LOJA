@@ -23,7 +23,7 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(name = "valor_total") // mudando o nome do camelCase
-	private BigDecimal valorTotal;
+	private BigDecimal valorTotal = BigDecimal.ZERO; // instanciando o objeto iniciando em zero
 	private LocalDate data = LocalDate.now();
 
 	@ManyToOne
@@ -38,6 +38,7 @@ public class Pedido {
 	public void adicionarItem(ItemPedido item) {
 		item.setPedido(this); // o item conhece o pedido
 		this.itens.add(item); // o pedido conhece o item
+		this.valorTotal = this.valorTotal.add(item.getValor());
 	}
 
 	public Pedido(Cliente cliente) {
