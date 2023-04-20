@@ -1,5 +1,6 @@
 package lzm_loja.modelo;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,24 +14,23 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
-	private String cpf;
+	@Embedded
+	private DadosPessoais dadosPessoais;
 
 	public Cliente() {
 
 	}
 
 	public Cliente(String nome, String cpf) {
-		this.nome = nome;
-		this.cpf = cpf;
+		this.dadosPessoais = new DadosPessoais(nome, cpf);
 	}
-
-	public String getCpf() {
-		return cpf;
+	
+	public String getNome() { // metodo delegado para dados pessoais
+		return this.dadosPessoais.getNome();
 	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	
+	public String getCpf() { // metodo delegado para dados pessoais
+		return this.dadosPessoais.getCpf();
 	}
 
 	public Long getId() {
@@ -40,12 +40,9 @@ public class Cliente {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getNome() {
-		return nome;
+	
+	public DadosPessoais getDadosPessoais() {
+		return dadosPessoais;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 }
