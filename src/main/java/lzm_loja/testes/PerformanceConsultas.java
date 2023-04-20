@@ -10,6 +10,7 @@ import lzm_loja.dao.PedidoDao;
 import lzm_loja.dao.ProdutoDao;
 import lzm_loja.modelo.Categoria;
 import lzm_loja.modelo.Cliente;
+import lzm_loja.modelo.ItemPedido;
 import lzm_loja.modelo.Pedido;
 import lzm_loja.modelo.Produto;
 import lzm_loja.util.JPAUtil;
@@ -25,40 +26,43 @@ public class PerformanceConsultas {
 	}
 	
 	private static void popularBancoDeDados() {
-		Categoria celulares = new Categoria("CELULARES"); // INSTANCIANDO CATEGORIA
+		Categoria celulares = new Categoria("CELULARES");
 		Categoria videogames = new Categoria("VIDEOGAMES");
 		Categoria informatica = new Categoria("INFORMATICA");
-		
-		Produto celular = new Produto("Xiomi Redmi", "8gb 128gb", new BigDecimal("800"), celulares);
-		Produto videogame = new Produto("PS5", "Playstation 5", new BigDecimal("3500"), videogames);
-		Produto macbook = new Produto("MacBook", "MacBook Pro 2023", new BigDecimal("5500"), informatica);
-		
-		Cliente cliente = new Cliente("Leonardo", "10101010");
-//		celular.setNome("Xiomi Redmi");
-//		celular.setDescricao("8gb 128gb");
-//		celular.setPreco(new BigDecimal("800"));
 
-		// usa inves de connection do JDBC, conectar com a DB loja
-//		EntityManagerFactory factory = Persistence.createEntityManagerFactory("loja");
-//		EntityManager em = factory.createEntityManager();
+		Produto celular = new Produto("Xiaomi Redmi", "Muito legal", new BigDecimal("800"), celulares);
+		Produto videogame = new Produto("PS5", "Playstation 5", new BigDecimal("8000"), videogames);
+		Produto macbook = new Produto("Macbook", "Macboo pro retina", new BigDecimal("14000"), informatica);
 
-		EntityManager em = JPAUtil.getEntityManager(); // usa JPAUtil para abrir conexão
+		Cliente cliente = new Cliente("Rodrigo", "123456");
+
+		Pedido pedido = new Pedido(cliente);
+		pedido.adicionarItem(new ItemPedido(10, pedido, celular));
+		pedido.adicionarItem(new ItemPedido(40, pedido, videogame));
+
+		Pedido pedido2 = new Pedido(cliente);
+		pedido2.adicionarItem(new ItemPedido(2, pedido, macbook));
+
+		EntityManager em = JPAUtil.getEntityManager();
 		ProdutoDao produtoDao = new ProdutoDao(em);
 		CategoriaDao categoriaDao = new CategoriaDao(em);
 		ClienteDao clienteDao = new ClienteDao(em);
+		PedidoDao pedidoDao = new PedidoDao(em);
 
 		em.getTransaction().begin();
 
 		categoriaDao.cadastrar(celulares);
 		categoriaDao.cadastrar(videogames);
 		categoriaDao.cadastrar(informatica);
-		
+
 		produtoDao.cadastrar(celular);
 		produtoDao.cadastrar(videogame);
 		produtoDao.cadastrar(macbook);
 
 		clienteDao.cadastrar(cliente);
-		
+
+		pedidoDao.cadastrar(pedido);
+		pedidoDao.cadastrar(pedido2);
 
 		em.getTransaction().commit();
 		em.close();
