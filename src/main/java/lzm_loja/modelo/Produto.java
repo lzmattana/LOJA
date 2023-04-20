@@ -8,12 +8,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "produtos")
-public class Produto {
+@Inheritance(strategy = InheritanceType.JOINED) // transformar tudo em uma tabela contendo atributos single table
+public class Produto {									// usando uma tabela para cada classe pode perder perfo
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
