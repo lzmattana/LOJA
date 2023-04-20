@@ -6,6 +6,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import lzm_loja.modelo.Produto;
 
@@ -82,5 +86,25 @@ public class ProdutoDao {
 		return query.getResultList();
 
 	}
+
+	public List<Produto> buscarPorParametrosComCriteria(String nome, BigDecimal preco, LocalDate dataCadastro) {
+		CriteriaBuilder builder = em.getCriteriaBuilder(); // builder para criar um obj criteria
+		CriteriaQuery<Produto> query = builder.createQuery(Produto.class); // criando query pelo builder
+		Root<Produto> from = query.from(Produto.class); // de onde vira a query vai pra variavel local
+
+		Predicate filtros = builder.and(); // para lidar com os and da query
+		if (nome != null && !nome.trim().isEmpty()) {
+			filtros = builder.and(filtros, builder.equal(from.get("nome"), nome));
+		}
+		if (preco != null) {
+			filtros = builder.and(filtros, builder.equal(from.get("preco"), preco));
+		}
+		if (dataCadastro != null) {
+			filtros = builder.and(filtros, builder.equal(from.get("dataCadastro"), dataCadastro));
+		}
+		query.where(filtros);
+		return em.createQuery(query).getResultList();
+	}
+
 
 }
