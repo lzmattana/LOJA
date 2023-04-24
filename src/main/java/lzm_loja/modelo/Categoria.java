@@ -1,5 +1,6 @@
 package lzm_loja.modelo;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,24 +11,18 @@ import javax.persistence.Table;
 @Table(name = "categorias") // diz qual o nome da tabela no DB
 public class Categoria {
 	
-	@Id // indentificar chave primaria
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // identificar que o DB fica responsavel por gerar chaves
-	private Long id;
-	private String nome;
+	@EmbeddedId
+	private CategoriaId id;
 	
-	public Categoria() {				
+	public Categoria() {
 	}
 	
 	public Categoria(String nome) {
-		this.nome = nome;
+		this.id = new CategoriaId(nome, "xpto");
 	}
-	
+
 	public String getNome() {
-		return nome;
+		return this.id.getNome();
 	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	
+
 }
